@@ -1,0 +1,6 @@
+#root {
+  margin: auto;
+  display: block;
+  z-index: 1000%;
+  position: relative;
+}
