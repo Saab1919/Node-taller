@@ -1,11 +1,11 @@
 import React from 'react';
-import Home from './home/home.jsx';  // ajusta la ruta si es necesario
+import HomePage from './features/dashboard/pages/HomePage.jsx';
 import './App.css';
 
 export default function App() {
   return (
     <div className="App">
-      <Home />
+      <HomePage />
     </div>
   );
 }
