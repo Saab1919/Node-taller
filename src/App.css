@@ -1,6 +1,5 @@
-#root {
-  margin: auto;
-  display: block;
-  z-index: 1000%;
-  position: relative;
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }

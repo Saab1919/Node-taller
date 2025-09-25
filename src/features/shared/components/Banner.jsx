@@ -1,13 +1,12 @@
 import React from "react";
 
-export default function Banner({ image, title, description, buttonText, buttonLink }) {
+export default function Banner({ image, title, description, buttonText, buttonLink, buttonAction }) {
 		return (
-			<section className="banner">
-				<img src={image} alt={title} className="banner-image" />
-				<div className="banner-text">
+			<section className="banner" style={{backgroundImage: `url(${image})`}}>
+				<div className="banner-content">
 					<h1>{title}</h1>
 					<p>{description}</p>
-					<a href={buttonLink} className="banner-btn">{buttonText}</a>
+					<button onClick={buttonAction || (() => window.location.href = buttonLink)}>{buttonText}</button>
 				</div>
 			</section>
 		);

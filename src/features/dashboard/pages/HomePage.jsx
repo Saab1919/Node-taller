@@ -1,6 +1,5 @@
-// Página principal restaurada
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 import Banner from "../../shared/components/Banner";
 import ProductList from "../../shared/components/ProductList";
 import AboutUs from "../../shared/components/AboutUs";
@@ -8,89 +7,52 @@ import Footer from "../../shared/components/Footer";
 import Cart from "../../shared/components/Cart";
 import Header from "../../shared/components/Header";
 import ContactForm from "../../shared/components/ContactForm";
-import "../../../home/home.css";
-
-const products = [
-	{
-		image: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png",
-		title: "Mochila Fjallraven",
-		description: "Mochila resistente al agua con compartimento para portátil.",
-		price: 109.95,
-	},
-	{
-		image: "https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_t.png",
-		title: "Camisa Slim Fit",
-		description: "Camisa casual de alta calidad, perfecta para oficina o eventos.",
-		price: 22.3,
-	},
-	{
-		image: "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_t.png",
-		title: "Chaqueta Impermeable",
-		description: "Chaqueta térmica e impermeable, ideal para invierno.",
-		price: 59.99,
-	},
-	{
-		image: "https://fakestoreapi.com/img/81Zt42ioCgL._AC_SX679_t.png",
-		title: "Samsung Curved Gaming Monitor",
-		description: "Monitor gamer ancho de 49 pulgadas.",
-		price: 150.0,
-	},
-	{
-		image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.nike.com%2Fus%2Fes%2Fw%2Fhombres-running-calzado-37v7jznik1zy7ok&psig=AOvVaw23Mn6KP0YUyqSQ8AbbYN7b&ust=1757080687790000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCPDh-uKhv48DFQAAAAAdAAAAABAE",
-		title: "Zapatos deportivos Nike",
-		description: "Zapatos cómodos y modernos para correr o uso diario.",
-		price: 89.99,
-	},
-	{
-		image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.universalshopcolombia.com.co%2Fproductos%2Freloj-casio-b640wc-5a-retro-clasico-juvenil%2F%3Fsrsltid%3DAfmBOoqrK-QeE9B7DbsYaX6EGVP6GRwENV7EhUxvEDKdw3UexMCHjwZw&psig=AOvVaw3c3D9unYdGy0zMU1hYLpvb&ust=1757080750941000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOjav4Civ48DFQAAAAAdAAAAABAE",
-		title: "Reloj Casio Vintage",
-		description: "Reloj digital clásico, resistente al agua y con alarma.",
-		price: 39.99,
-	},
-	{
-		image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.ray-ban.com%2Fspain%2Fgafas-de-sol%2FRB3025JM%2BUNISEX%2Baviator%2Bfull%2Bcolor%2Blegend-rojo%2F8056597446587&psig=AOvVaw0lzKznPBfyRYnFyHe4k1Js&ust=1757080861050000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCJjXlraiv48DFQAAAAAdAAAAABAE",
-		title: "Gafas Ray-Ban Aviator",
-		description: "Gafas de sol originales, protección UV y diseño icónico.",
-		price: 129.99,
-	},
-	{
-		image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.es%2Ffotos-premium%2Fbolso-cuero-hombre-hecho-cuero-genuino-foto-fue-creada-taller-artesanal-fondo-hay-herramientas-trabajo-cinturon-maletin-cuero-marron-cartera-trabajo_35596234.htm&psig=AOvVaw0T9SbIIDQXCJ7dW4gfA57z&ust=1757080914360000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCKC23dCiv48DFQAAAAAdAAAAABAE",
-		title: "Bolso de cuero artesanal",
-		description: "Bolso hecho a mano, ideal para trabajo o universidad.",
-		price: 79.99,
-	},
-	{
-		image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.falabella.com.co%2Ffalabella-co%2Fproduct%2Fprod13431503%2FAudifonos-bluetooth-JBL-TFLEX-%2F72724690&psig=AOvVaw2MZx4IydS6sWLFtQqUF6SF&ust=1757080956064000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOj_p_Oiv48DFQAAAAAdAAAAABAE",
-		title: "Audífonos inalámbricos JBL",
-		description: "Sonido potente, batería de larga duración y bluetooth.",
-		price: 59.99,
-	},
-	{
-		image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.ubuy.com.co%2Fsp%2Fproduct%2F4K16MTLYY-canon-eos-rebel-t3i-18-megapixel-digital-slr-camera-with-lens-0-71-2-17%3Fsrsltid%3DAfmBOopszJ3Zb1p1xnDA-zkm2_sJZBzo_TqsooMelX8_eDnr4gocA4Zq&psig=AOvVaw0TizjGzFBfXX3sQbCkkGnl&ust=1757081025333000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCMiwhISjv48DFQAAAAAdAAAAABAE",
-		title: "Cámara Canon EOS Rebel",
-		description: "Cámara profesional para fotografía y video HD.",
-		price: 499.99,
-	},
-];
+import Profile from "../../shared/components/Profile";
+import "../../../assets/home.css";
 
 export default function HomePage() {
 	const [cart, setCart] = useState([]);
 	const [showCart, setShowCart] = useState(false);
 	const [search, setSearch] = useState("");
 	const [showContact, setShowContact] = useState(false);
+	const [products, setProducts] = useState([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		fetch('https://fakestoreapi.com/products')
+			.then(res => res.json())
+			.then(data => {
+				setProducts(data);
+				setLoading(false);
+			})
+			.catch(error => {
+				console.error('Error fetching products:', error);
+				setLoading(false);
+			});
+	}, []);
+
+		const [currentView, setCurrentView] = useState('home');
+	const [favorites, setFavorites] = useState([]);
+	const [showToast, setShowToast] = useState(null);
+	const [scrollY, setScrollY] = useState(0);
+
+	useEffect(() => {
+		const handleScroll = () => setScrollY(window.scrollY);
+		window.addEventListener('scroll', handleScroll);
+		return () => window.removeEventListener('scroll', handleScroll);
+	}, []);
 
 		const menuItems = [
-			{ text: "Inicio", href: "/" },
-			{ text: "Catálogo", href: "/catalogo.html" },
-			{ text: "Ofertas", href: "/ofertas.html" },
-			{ text: "Nosotros", href: "/nosotros.html" },
-			{ text: "Contacto", href: "#contacto", onClick: () => setShowContact(true) },
+			{ text: "Inicio", onClick: () => setCurrentView('home'), view: 'home' },
+			{ text: "Catálogo", onClick: () => setCurrentView('products'), view: 'products' },
+			{ text: "Nosotros", onClick: () => setCurrentView('about'), view: 'about' },
+			{ text: "👤", onClick: () => setCurrentView('profile'), isIcon: true, view: 'profile' },
 		];
 
 	const footerLinks = [
-		{ text: "Política de Privacidad", href: "/privacidad.html" },
-		{ text: "Términos y Condiciones", href: "/terminos.html" },
-		{ text: "Ayuda", href: "/ayuda.html" },
+		{ text: "Política de Privacidad", href: "#privacidad" },
+		{ text: "Términos y Condiciones", href: "#terminos" },
+		{ text: "Ayuda", href: "#ayuda" },
 	];
 
 	const socialLinks = [
@@ -109,6 +71,27 @@ export default function HomePage() {
 	// Función para agregar producto al carrito
 	const handleAddToCart = (product) => {
 		setCart((prev) => [...prev, product]);
+		showToastMessage(`${product.title} agregado al carrito! 🛒`);
+	};
+
+	// Función para manejar favoritos
+	const toggleFavorite = (product) => {
+		setFavorites(prev => {
+			const isFavorite = prev.some(fav => fav.id === product.id);
+			if (isFavorite) {
+				showToastMessage(`${product.title} removido de favoritos 💔`);
+				return prev.filter(fav => fav.id !== product.id);
+			} else {
+				showToastMessage(`${product.title} agregado a favoritos! ❤️`);
+				return [...prev, product];
+			}
+		});
+	};
+
+	// Función para mostrar toast
+	const showToastMessage = (message) => {
+		setShowToast(message);
+		setTimeout(() => setShowToast(null), 3000);
 	};
 
 	// Eliminar producto del carrito por índice
@@ -119,48 +102,102 @@ export default function HomePage() {
 		return (
 			<div className="home-container">
 				<Header
-					logo="KeyStore"
+					logo="TRICKSTORE"
 					menuItems={menuItems}
+					currentView={currentView}
 					phone="+57 300 123 4567"
-					email="contacto@keystore.com"
+					email="contacto@trickstore.com"
 					cart={cart}
 					onCartClick={() => setShowCart(true)}
 					search={search}
 					setSearch={setSearch}
 				/>
 
-				{showCart && (
+				<div className={`cart-sidebar ${showCart ? 'cart-open' : ''}`}>
 					<Cart cart={cart} onClose={() => setShowCart(false)} onRemoveFromCart={handleRemoveFromCart} />
+				</div>
+				{showCart && <div className="cart-overlay" onClick={() => setShowCart(false)}></div>}
+
+				{showToast && (
+					<div className="toast-notification">
+						{showToast}
+					</div>
 				)}
 
 				{showContact && (
 					<ContactForm onClose={() => setShowContact(false)} />
 				)}
 
-				{!showContact && <>
-					<Banner
-						image="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2"
-						title="Nuevas Tendencias 2025"
-						description="Renueva tu estilo con nuestra colección más reciente de productos de alta calidad."
-						buttonText="Ver catálogo"
-						buttonLink="/catalogo.html"
-					/>
+				{!showContact && (
+					<>
+						{currentView === 'home' && (
+							<>
+								<div className="parallax-banner" style={{ transform: `translateY(${scrollY * 0.5}px)` }}>
+									<Banner
+										image="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2"
+										title="Bienvenido a TRICKSTORE"
+										description="Descubre nuestra increíble colección de productos de alta calidad. Tu estilo, nuestra pasión."
+										buttonText="Explorar Productos"
+										buttonAction={() => setCurrentView('products')}
+									/>
+								</div>
+								<div className="features-section" style={{ padding: '80px 20px', textAlign: 'center', background: '#1a1a1a' }}>
+									<h2 style={{ color: '#e91e63', fontSize: '2.5rem', marginBottom: '30px' }}>Por qué elegir TRICKSTORE</h2>
+									<div className="features-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px', maxWidth: '1200px', margin: '0 auto' }}>
+										<div className="feature-card" style={{ background: '#2a2a2a', padding: '30px', borderRadius: '15px', border: '2px solid #e91e63' }}>
+											<h3 style={{ color: '#e91e63', marginBottom: '15px' }}>🚚 Envío Rápido</h3>
+											<p style={{ color: '#ccc' }}>Entrega en 24-48 horas en toda Colombia</p>
+										</div>
+										<div className="feature-card" style={{ background: '#2a2a2a', padding: '30px', borderRadius: '15px', border: '2px solid #e91e63' }}>
+											<h3 style={{ color: '#e91e63', marginBottom: '15px' }}>✨ Calidad Premium</h3>
+											<p style={{ color: '#ccc' }}>Productos seleccionados con los más altos estándares</p>
+										</div>
+										<div className="feature-card" style={{ background: '#2a2a2a', padding: '30px', borderRadius: '15px', border: '2px solid #e91e63' }}>
+											<h3 style={{ color: '#e91e63', marginBottom: '15px' }}>📞 Soporte 24/7</h3>
+											<p style={{ color: '#ccc' }}>Atención al cliente siempre disponible</p>
+										</div>
+									</div>
+								</div>
+							</>
+						)}
 
-					<ProductList products={filteredProducts} onAddToCart={handleAddToCart} />
+						{currentView === 'products' && (
+							<div className="products-page" style={{ padding: '40px 20px', minHeight: '80vh' }}>
+								<h1 style={{ textAlign: 'center', color: '#e91e63', marginBottom: '40px', fontSize: '2.5rem' }}>Nuestros Productos</h1>
+								<ProductList products={filteredProducts} onAddToCart={handleAddToCart} toggleFavorite={toggleFavorite} favorites={favorites} />
+							</div>
+						)}
 
-					<AboutUs
-						title="Sobre KeyStore"
-						text="Somos una tienda dedicada a ofrecer productos de la más alta calidad. 
-									Nos apasiona brindar un excelente servicio y garantizar que cada cliente 
-									encuentre lo que busca, con precios justos y entrega rápida."
-					/>
+						{currentView === 'about' && (
+							<div style={{ padding: '40px 20px', minHeight: '80vh' }}>
+								<AboutUs
+									title="Sobre TRICKSTORE"
+									text="Somos una tienda dedicada a ofrecer productos de la más alta calidad. Nos apasiona brindar un excelente servicio y garantizar que cada cliente encuentre lo que busca, con precios justos y entrega rápida."
+								/>
+								<div style={{ maxWidth: '1200px', margin: '60px auto 0', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '40px' }}>
+									<div style={{ background: '#2a2a2a', padding: '40px', borderRadius: '15px', border: '2px solid #e91e63' }}>
+										<h3 style={{ color: '#e91e63', marginBottom: '20px', fontSize: '1.5rem' }}>Nuestra Historia</h3>
+										<p style={{ color: '#ccc', lineHeight: '1.6' }}>Fundada en 2025, TRICKSTORE nació con la visión de democratizar el acceso a productos de calidad. Comenzamos como una pequeña tienda y hoy somos líderes en e-commerce.</p>
+									</div>
+									<div style={{ background: '#2a2a2a', padding: '40px', borderRadius: '15px', border: '2px solid #e91e63' }}>
+										<h3 style={{ color: '#e91e63', marginBottom: '20px', fontSize: '1.5rem' }}>Nuestra Misión</h3>
+										<p style={{ color: '#ccc', lineHeight: '1.6' }}>Conectar a las personas con productos que mejoren su vida diaria, ofreciendo una experiencia de compra excepcional y un servicio al cliente incomparable.</p>
+									</div>
+								</div>
+							</div>
+						)}
 
-					<Footer
-						text="© 2025 KeyStore. Todos los derechos reservados."
-						links={footerLinks}
-						social={socialLinks}
-					/>
-				</>}
+						{currentView === 'profile' && (
+							<Profile />
+						)}
+
+						<Footer
+							text="© 2025 TRICKSTORE. Todos los derechos reservados."
+							links={footerLinks}
+							social={socialLinks}
+						/>
+					</>
+				)}
 			</div>
 		);
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../../home/home.css";
+import "../../../assets/home.css";
 import emailjs from '@emailjs/browser';
 
 export default function ContactForm({ onClose }) {
@@ -17,16 +17,16 @@ export default function ContactForm({ onClose }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     // EmailJS config
-    const serviceId = 'service_ll7fl6a';
-    const templateId = 'template_3wc4pde';
-    const publicKey = 'N8dLm0hcixBbqVCEP';
+    const serviceId = 'TU_SERVICE_ID';
+    const templateId = 'TU_TEMPLATE_ID';
+    const userId = 'TU_USER_ID';
     // Los valores deben coincidir con los de tu plantilla en EmailJS
     emailjs.send(serviceId, templateId, {
       nombre: form.nombre,
       email: form.email,
       mensaje: form.mensaje,
       to_email: 'blandonsantiago67@gmail.com',
-    }, publicKey)
+    }, userId)
       .then(() => {
         setSent(true);
         setTimeout(() => {
@@ -42,7 +42,7 @@ export default function ContactForm({ onClose }) {
   return (
     <div className={`contact-modal${show ? " show" : ""}`}>
       <div className="contact-card">
-        <button className="close-btn" onClick={onClose}>Cerrar</button>
+        <button className="close-btn" onClick={onClose}>✕</button>
         <h2>Contacto</h2>
         {sent ? (
           <div className="contact-success">¡Mensaje enviado correctamente!</div>
